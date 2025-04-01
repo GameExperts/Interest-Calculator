@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online interest rate calculator for loans and savings. Calculate simple and compound interest with our easy-to-use tool.">
+    <meta name="keywords" content="interest calculator, loan calculator, savings calculator, compound interest, simple interest, financial tool">
+    <meta name="author" content="Financial Tools">
+    <title>Interest Rate Calculator | Simple & Compound Interest Tool</title>
+    <link rel="canonical" href="https://yourwebsite.com/interest-calculator">
+    <style>
+        :root {
+            --primary: #4285f4;
+            --secondary: #34a853;
+            --danger: #ea4335;
+            --warning: #fbbc05;
+            --dark: #202124;
+            --light: #f8f9fa;
+            --gray: #5f6368;
+            --radius: 8px;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+
+        .description {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .calculator-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        @media (min-width: 900px) {
+            .calculator-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .calculator-form, .results {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: #f1f3f4;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #dadce0;
+            border-radius: var(--radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 12px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-calculate {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-reset {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .results {
+            display: none;
+        }
+
+        .results h2 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .total-amount {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: var(--radius);
+            font-weight: 600;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .chart-container {
+            margin-top: 30px;
+            height: 300px;
+        }
+
+        .error {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .ad-container {
+            margin: 30px 0;
+            text-align: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: var(--radius);
+        }
+
+        .ad-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .btn-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator-form, .results {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Interest Rate Calculator</h1>
+            <p class="description">Calculate simple or compound interest for loans and savings with our easy-to-use calculator</p>
+        </header>
+
+        <div class="ad-container">
+            <div class="ad-label">Advertisement</div>
+            <!-- AdSense Code -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-<script type="text/javascript">
+	atOptions = {
+		'key' : 'd790fe154b5c74a0aefb1b6620248b43',
+		'format' : 'iframe',
+		'height' : 600,
+		'width' : 160,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/d790fe154b5c74a0aefb1b6620248b43/invoke.js"></script>"></script>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="https://www.effectiveratecpm.com/xmy9u7dh?key=ad374bcc0606536d7bbcb1ce795c79e3
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div class="calculator-container">
+            <div class="calculator-form">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('simple')">Simple Interest</button>
+                    <button class="tab" onclick="switchTab('compound')">Compound Interest</button>
+                </div>
+
+                <div id="simple-tab" class="tab-content active">
+                    <div class="form-group">
+                        <label for="principal">Principal Amount ($)</label>
+                        <input type="number" id="principal" placeholder="e.g. 1000" min="1" value="1000">
+                        <div class="error" id="principal-error">Please enter a valid amount</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rate">Annual Interest Rate (%)</label>
+                        <input type="number" id="rate" placeholder="e.g. 5" step="0.01" min="0" value="5">
+                        <div class="error" id="rate-error">Please enter a valid interest rate</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="time">Time Period</label>
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+                            <input type="number" id="time" placeholder="e.g. 3" min="0" value="3">
+                            <select id="time-unit">
+                                <option value="years" selected>Years</option>
+                                <option value="months">Months</option>
+                                <option value="days">Days</option>
+                            </select>
+                        </div>
+                        <div class="error" id="time-error">Please enter a valid time period</div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-calculate" onclick="calculateSimpleInterest()">Calculate</button>
+                        <button class="btn btn-reset" onclick="resetCalculator()">Reset</button>
+                    </div>
+                </div>
+
+                <div id="compound-tab" class="tab-content">
+                    <div class="form-group">
+                        <label for="c-principal">Principal Amount ($)</label>
+                        <input type="number" id="c-principal" placeholder="e.g. 1000" min="1" value="1000">
+                        <div class="error" id="c-principal-error">Please enter a valid amount</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="c-rate">Annual Interest Rate (%)</label>
+                        <input type="number" id="c-rate" placeholder="e.g. 5" step="0.01" min="0" value="5">
+                        <div class="error" id="c-rate-error">Please enter a valid interest rate</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="c-time">Time Period (Years)</label>
+                        <input type="number" id="c-time" placeholder="e.g. 5" min="0" value="5">
+                        <div class="error" id="c-time-error">Please enter a valid time period</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="compound-freq">Compounding Frequency</label>
+                        <select id="compound-freq">
+                            <option value="1">Annually</option>
+                            <option value="2">Semi-Annually</option>
+                            <option value="4">Quarterly</option>
+                            <option value="12" selected>Monthly</option>
+                            <option value="52">Weekly</option>
+                            <option value="365">Daily</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="monthly-contribution">Monthly Contribution ($)</label>
+                        <input type="number" id="monthly-contribution" placeholder="e.g. 100" min="0" value="0">
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-calculate" onclick="calculateCompoundInterest()">Calculate</button>
+                        <button class="btn btn-reset" onclick="resetCalculator()">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results" id="results">
+                <h2 id="results-title">Calculation Results</h2>
+                <div id="results-content">
+                    <div class="total-amount" id="total-amount"></div>
+                    <div class="result-item">
+                        <span>Principal Amount:</span>
+                        <span class="result-value" id="result-principal"></span>
+                    </div>
+                    <div class="result-item">
+                        <span id="interest-label">Interest Earned:</span>
+                        <span class="result-value" id="result-interest"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Total Amount:</span>
+                        <span class="result-value" id="result-total"></span>
+                    </div>
+                    <div id="contributions-result" class="result-item" style="display: none;">
+                        <span>Total Contributions:</span>
+                        <span class="result-value" id="result-contributions"></span>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="resultsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-container">
+            <div class="ad-label">Advertisement</div>
+            <!-- AdSense Code -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-<script type="text/javascript">
+	atOptions = {
+		'key' : 'd790fe154b5c74a0aefb1b6620248b43',
+		'format' : 'iframe',
+		'height' : 600,
+		'width' : 160,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/d790fe154b5c74a0aefb1b6620248b43/invoke.js"></script>"></script>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="https://www.effectiveratecpm.com/xmy9u7dh?key=ad374bcc0606536d7bbcb1ce795c79e3
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div class="info-section" style="margin-top: 40px; background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);">
+            <h2 style="color: var(--primary); margin-bottom: 15px;">Understanding Interest Rates</h2>
+            <h3 style="margin: 15px 0 10px; color: var(--dark);">Simple Interest</h3>
+            <p>Simple interest is calculated only on the original principal amount. It's commonly used for short-term loans and some savings accounts.</p>
+            <p style="font-family: monospace; background: #f5f7fa; padding: 10px; border-radius: 4px; margin: 10px 0;">
+                Interest = Principal × Rate × Time
+            </p>
+
+            <h3 style="margin: 15px 0 10px; color: var(--dark);">Compound Interest</h3>
+            <p>Compound interest is calculated on the initial principal and also on the accumulated interest of previous periods. It's more common for long-term investments.</p>
+            <p style="font-family: monospace; background: #f5f7fa; padding: 10px; border-radius: 4px; margin: 10px 0;">
+                A = P × (1 + r/n)<sup>nt</sup>
+            </p>
+            <p>Where:<br>
+            A = Final amount<br>
+            P = Principal amount<br>
+            r = Annual interest rate<br>
+            n = Number of compounding periods per year<br>
+            t = Time in years</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© <span id="year"></span> Interest Rate Calculator. All rights reserved.</p>
+        <p style="margin-top: 8px;">
+            <a href="/privacy" style="color: var(--primary);">Privacy Policy</a> | 
+            <a href="/terms" style="color: var(--primary);">Terms of Service</a>
+        </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Global chart reference
+        let resultsChart = null;
+
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Switch between tabs
+        function switchTab(tabName) {
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Reset calculator when switching tabs
+            resetCalculator();
+        }
+
+        // Validate input
+        function validateInput(inputId, errorId) {
+            const input = document.getElementById(inputId);
+            const error = document.getElementById(errorId);
+            
+            if (!input.value || isNaN(input.value) || parseFloat(input.value) < 0) {
+                error.style.display = 'block';
+                input.style.borderColor = 'var(--danger)';
+                return false;
+            } else {
+                error.style.display = 'none';
+                input.style.borderColor = '#dadce0';
+                return true;
+            }
+        }
+
+        // Calculate simple interest
+        function calculateSimpleInterest() {
+            // Validate inputs
+            const principalValid = validateInput('principal', 'principal-error');
+            const rateValid = validateInput('rate', 'rate-error');
+            const timeValid = validateInput('time', 'time-error');
+            
+            if (!principalValid || !rateValid || !timeValid) return;
+            
+            // Get input values
+            const principal = parseFloat(document.getElementById('principal').value);
+            const rate = parseFloat(document.getElementById('rate').value);
+            let time = parseFloat(document.getElementById('time').value);
+            const timeUnit = document.getElementById('time-unit').value;
+            
+            // Convert time to years
+            if (timeUnit === 'months') {
+                time = time / 12;
+            } else if (timeUnit === 'days') {
+                time = time / 365;
+            }
+            
+            // Calculate simple interest
+            const interest = principal * (rate / 100) * time;
+            const totalAmount = principal + interest;
+            
+            // Display results
+            document.getElementById('results-title').textContent = 'Simple Interest Results';
+            document.getElementById('interest-label').textContent = 'Interest Earned:';
+            document.getElementById('total-amount').textContent = `Total Amount: ${formatCurrency(totalAmount)}`;
+            document.getElementById('result-principal').textContent = formatCurrency(principal);
+            document.getElementById('result-interest').textContent = formatCurrency(interest);
+            document.getElementById('result-total').textContent = formatCurrency(totalAmount);
+            document.getElementById('contributions-result').style.display = 'none';
+            
+            // Show results section
+            document.getElementById('results').style.display = 'block';
+            
+            // Create simple chart
+            createSimpleChart(principal, interest, time);
+        }
+
+        // Calculate compound interest
+        function calculateCompoundInterest() {
+            // Validate inputs
+            const principalValid = validateInput('c-principal', 'c-principal-error');
+            const rateValid = validateInput('c-rate', 'c-rate-error');
+            const timeValid = validateInput('c-time', 'c-time-error');
+            
+            if (!principalValid || !rateValid || !timeValid) return;
+            
+            // Get input values
+            const principal = parseFloat(document.getElementById('c-principal').value);
+            const rate = parseFloat(document.getElementById('c-rate').value) / 100;
+            const time = parseFloat(document.getElementById('c-time').value);
+            const compoundFreq = parseInt(document.getElementById('compound-freq').value);
+            const monthlyContribution = parseFloat(document.getElementById('monthly-contribution').value) || 0;
+            
+            // Calculate compound interest
+            let totalAmount, totalInterest;
+            const yearlyData = [];
+            
+            if (monthlyContribution > 0) {
+                // With monthly contributions
+                let balance = principal;
+                const monthlyRate = rate / 12;
+                const months = time * 12;
+                
+                for (let i = 1; i <= months; i++) {
+                    const interestEarned = balance * monthlyRate;
+                    balance += interestEarned + monthlyContribution;
+                    
+                    if (i % 12 === 0 || i === months) {
+                        yearlyData.push({
+                            year: i / 12,
+                            principal: principal,
+                            contributions: monthlyContribution * i,
+                            interest: balance - principal - (monthlyContribution * i),
+                            total: balance
+                        });
+                    }
+                }
+                
+                totalAmount = balance;
+                totalInterest = balance - principal - (monthlyContribution * months);
+            } else {
+                // Without monthly contributions
+                totalAmount = principal * Math.pow(1 + (rate / compoundFreq), compoundFreq * time);
+                totalInterest = totalAmount - principal;
+                
+                // Generate yearly data for chart
+                for (let year = 1; year <= time; year++) {
+                    yearlyData.push({
+                        year: year,
+                        principal: principal,
+                        contributions: 0,
+                        interest: principal * Math.pow(1 + (rate / compoundFreq), compoundFreq * year) - principal,
+                        total: principal * Math.pow(1 + (rate / compoundFreq), compoundFreq * year)
+                    });
+                }
+            }
+            
+            // Display results
+            document.getElementById('results-title').textContent = 'Compound Interest Results';
+            document.getElementById('interest-label').textContent = 'Interest Earned:';
+            document.getElementById('total-amount').textContent = `Final Amount: ${formatCurrency(totalAmount)}`;
+            document.getElementById('result-principal').textContent = formatCurrency(principal);
+            document.getElementById('result-interest').textContent = formatCurrency(totalInterest);
+            document.getElementById('result-total').textContent = formatCurrency(totalAmount);
+            
+            if (monthlyContribution > 0) {
+                document.getElementById('result-contributions').textContent = 
+                    formatCurrency(monthlyContribution * time * 12);
+                document.getElementById('contributions-result').style.display = 'flex';
+            } else {
+                document.getElementById('contributions-result').style.display = 'none';
+            }
+            
+            // Show results section
+            document.getElementById('results').style.display = 'block';
+            
+            // Create compound chart
+            createCompoundChart(yearlyData, monthlyContribution > 0);
+        }
+
+        // Create chart for simple interest
+        function createSimpleChart(principal, interest, time) {
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            
+            // Destroy previous chart if exists
+            if (resultsChart) {
+                resultsChart.destroy();
+            }
+            
+            resultsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Principal', 'Interest'],
+                    datasets: [{
+                        label: 'Amount',
+                        data: [principal, interest],
+                        backgroundColor: [
+                            'rgba(66, 133, 244, 0.7)',
+                            'rgba(52, 168, 83, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(66, 133, 244, 1)',
+                            'rgba(52, 168, 83, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Simple Interest Over ${time} ${time === 1 ? 'Year' : 'Years'}`,
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create chart for compound interest
+        function createCompoundChart(yearlyData, hasContributions) {
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            
+            // Destroy previous chart if exists
+            if (resultsChart) {
+                resultsChart.destroy();
+            }
+            
+            const labels = yearlyData.map(data => `Year ${data.year}`);
+            const principalData = yearlyData.map(data => data.principal);
+            const interestData = yearlyData.map(data => data.interest);
+            const contributionData = yearlyData.map(data => data.contributions);
+            
+            const datasets = [
+                {
+                    label: 'Principal',
+                    data: principalData,
+                    backgroundColor: 'rgba(66, 133, 244, 0.7)',
+                    borderColor: 'rgba(66, 133, 244, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Interest',
+                    data: interestData,
+                    backgroundColor: 'rgba(52, 168, 83, 0.7)',
+                    borderColor: 'rgba(52, 168, 83, 1)',
+                    borderWidth: 1
+                }
+            ];
+            
+            if (hasContributions) {
+                datasets.push({
+                    label: 'Contributions',
+                    data: contributionData,
+                    backgroundColor: 'rgba(251, 188, 5, 0.7)',
+                    borderColor: 'rgba(251, 188, 5, 1)',
+                    borderWidth: 1
+                });
+            }
+            
+            resultsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Compound Interest Growth',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Reset calculator
+        function resetCalculator() {
+            // Reset all inputs
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.value = '';
+            });
+            
+            // Reset selects to defaults
+            document.getElementById('time-unit').value = 'years';
+            document.getElementById('compound-freq').value = '12';
+            
+            // Hide all errors
+            document.querySelectorAll('.error').forEach(error => {
+                error.style.display = 'none';
+            });
+            
+            // Reset input borders
+            document.querySelectorAll('input').forEach(input => {
+                input.style.borderColor = '#dadce0';
+            });
+            
+            // Hide results
+            document.getElementById('results').style.display = 'none';
+            
+            // Destroy chart if exists
+            if (resultsChart) {
+                resultsChart.destroy();
+                resultsChart = null;
+            }
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', { 
+                style: 'currency', 
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        // Initialize with simple interest calculation
+        window.onload = function() {
+            calculateSimpleInterest();
+        };
+    </script>
+</body>
+<script type="text/javascript">
+	atOptions = {
+		'key' : 'a09bfcb3fbec7f6ca8566422bfd15c8e',
+		'format' : 'iframe',
+		'height' : 90,
+		'width' : 728,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/a09bfcb3fbec7f6ca8566422bfd15c8e/invoke.js"></script>
+</html>
